@@ -1,0 +1,65 @@
+### Get all cats
+GET http://127.0.0.1:3000/api/v1/cats
+
+### Get cat by ID
+GET http://127.0.0.1:3000/api/v1/cats/1
+
+### Add a new cat
+POST http://127.0.0.1:3000/api/v1/cats
+Content-Type: application/json
+
+{
+  "cat_name": "Peo",
+  "birthdate": "2021-08-20",
+  "weight": 5.2,
+  "owner": "Minä",
+  "image": "https://loremflickr.com/320/240/cat"
+}
+
+### Update a cat
+PUT http://127.0.0.1:3000/api/v1/cats/1
+Content-Type: application/json
+
+{
+  "name": "Updated Kissa"
+}
+
+### Delete a cat
+DELETE http://127.0.0.1:3000/api/v1/cats/1
+
+#####
+###
+#####
+
+### Get all users
+GET http://127.0.0.1:3000/api/v1/users
+
+### Get user by ID
+GET http://127.0.0.1:3000/api/v1/users/3609
+
+### Add a new user
+POST http://127.0.0.1:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Tester",
+  "username": "test",
+  "email": "test@metropolia.fi",
+  "role": "user",
+  "password": "testpassword"
+}
+
+### Update a user
+PUT http://127.0.0.1:3000/api/v1/users/3609
+Content-Type: application/json
+
+{
+  "name": "Updated Tester",
+  "username": "updatedtest",
+  "email": "updatedtest@metropolia.fi",
+  "role": "user",
+  "password": "updatedtestpassword"
+}
+
+### Delete a user
+DELETE http://127.0.0.1:3000/api/v1/users/3609
