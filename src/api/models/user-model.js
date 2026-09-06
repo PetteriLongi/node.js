@@ -1,14 +1,16 @@
 import promisePool from "../../utils/database.js";
 
 const listAllUsers = async () => {
-  const [rows] = await promisePool.query("SELECT * FROM wsk_users");
+  const [rows] = await promisePool.query(
+    "SELECT user_id, name, username, email, role FROM wsk_users",
+  );
   console.log("rows", rows);
   return rows;
 };
 
 const findUserById = async (id) => {
   const [rows] = await promisePool.execute(
-    "SELECT * FROM wsk_users WHERE user_id = ?",
+    "SELECT user_id, name, username, email, role FROM wsk_users WHERE user_id = ?",
     [id],
   );
 
@@ -39,6 +41,20 @@ const addUser = async (user) => {
   return {
     user_id: result.insertId,
   };
+};
+
+const findUserByUsername = async (user) => {
+  const sql = `SELECT *
+               FROM wsk_users
+               WHERE username = ?`;
+
+  const [rows] = await promisePool.execute(sql, [user]);
+
+  if (rows.length === 0) {
+    return false;
+  }
+
+  return rows[0];
 };
 
 const modifyUser = async (user, id) => {
@@ -94,4 +110,11 @@ const removeUser = async (id) => {
   }
 };
 
-export { listAllUsers, findUserById, addUser, modifyUser, removeUser };
+export {
+  listAllUsers,
+  findUserById,
+  findUserByUsername,
+  addUser,
+  modifyUser,
+  removeUser,
+};
