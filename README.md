@@ -34,6 +34,6 @@ Tokens are valid for 24 hours.
 
 Security stuff
 
-While testing the API, I noticed that if a user updated "role": "admin" they could change their own role. I fixed it by limiting the update endpoint to only accept "name, username and email". of course this created a new limitation so that no one is able to change passwords or roles through that endpoint.
+While testing the API, I noticed that if a user updated "role": "admin" they could change their own role. I fixed it by limiting the update endpoint to only accept "name, username and email". of course this created a new limitation so that no one is able to change passwords or roles through that endpoint.something to update later.
 
 Another weird thing I noticed was that if someone wanted to they could login, add a cat then by updating the cat and changing the owner in the form they could send their cat to another user. I fixed this by only taking cat_name, weight, and birthdate from req.body and then passing the data.

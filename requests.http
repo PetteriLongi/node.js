@@ -106,3 +106,80 @@ Content-Type: application/json
 ### Delete a user
 DELETE http://127.0.0.1:3000/api/v1/users/38
 
+### Login for protected validation tests
+# @name validationLogin
+POST http://127.0.0.1:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "testpassword"
+}
+
+### Invalid user: empty request body
+POST http://127.0.0.1:3000/api/v1/users
+Content-Type: application/json
+
+{}
+
+### Invalid cat: missing required fields
+POST http://127.0.0.1:3000/api/v1/cats
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0MSwibmFtZSI6IlRlc3RlciIsInVzZXJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEBtZXRyb3BvbGlhLmZpIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3ODg2OTk5ODAsImV4cCI6MTc4ODc4NjM4MH0.ovOP60RyFY4WeifI1YmuCqeON4yf0C1a_tkyg4jLnAY
+Content-Type: multipart/form-data; boundary=ValidationBoundary
+
+--ValidationBoundary
+Content-Disposition: form-data; name="cat"; filename="placeholder_image.png"
+Content-Type: image/png
+
+< ./public/placeholder_image.png
+--ValidationBoundary--
+
+### Invalid cat: unsupported file type
+POST http://127.0.0.1:3000/api/v1/cats
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0MSwibmFtZSI6IlRlc3RlciIsInVzZXJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEBtZXRyb3BvbGlhLmZpIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3ODg2OTk5ODAsImV4cCI6MTc4ODc4NjM4MH0.ovOP60RyFY4WeifI1YmuCqeON4yf0C1a_tkyg4jLnAY
+Content-Type: multipart/form-data; boundary=InvalidFileBoundary
+
+--InvalidFileBoundary
+Content-Disposition: form-data; name="cat_name"
+
+Validation test cat
+--InvalidFileBoundary
+Content-Disposition: form-data; name="weight"
+
+5
+--InvalidFileBoundary
+Content-Disposition: form-data; name="birthdate"
+
+2021-08-20
+--InvalidFileBoundary
+Content-Disposition: form-data; name="cat"; filename="not-an-image.txt"
+Content-Type: text/plain
+
+This file must be rejected.
+--InvalidFileBoundary--
+
+### Invalid cat: file larger than 10 MB
+# Create ./public/over-10mb.bin before running this request.
+POST http://127.0.0.1:3000/api/v1/cats
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0MSwibmFtZSI6IlRlc3RlciIsInVzZXJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEBtZXRyb3BvbGlhLmZpIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3ODg2OTk5ODAsImV4cCI6MTc4ODc4NjM4MH0.ovOP60RyFY4WeifI1YmuCqeON4yf0C1a_tkyg4jLnAY
+Content-Type: multipart/form-data; boundary=LargeFileBoundary
+
+--LargeFileBoundary
+Content-Disposition: form-data; name="cat_name"
+
+Validation test cat
+--LargeFileBoundary
+Content-Disposition: form-data; name="weight"
+
+5
+--LargeFileBoundary
+Content-Disposition: form-data; name="birthdate"
+
+2021-08-20
+--LargeFileBoundary
+Content-Disposition: form-data; name="cat"; filename="over-10mb.bin"
+Content-Type: image/png
+
+< ./public/over-10mb.bin
+--LargeFileBoundary--
+

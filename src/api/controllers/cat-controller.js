@@ -12,13 +12,15 @@ const getCat = async (req, res) => {
   res.json(cats);
 };
 
-const getCatById = async (req, res) => {
+const getCatById = async (req, res, next) => {
   const cat = await findCatById(req.params.id);
-  if (cat) {
-    res.json(cat);
-  } else {
-    res.sendStatus(404);
+  if (!cat) {
+    const error = new Error("Cat not found");
+    error.status = 404;
+    next(error);
+    return;
   }
+  res.json(cat);
 };
 
 const getCatsByUserId = async (req, res) => {
@@ -27,9 +29,16 @@ const getCatsByUserId = async (req, res) => {
   res.json(cats);
 };
 
-const postCat = async (req, res) => {
+const postCat = async (req, res, next) => {
   console.log(req.body);
   console.log(req.file);
+
+  if (!req.file) {
+    const error = new Error("Invalid or missing file");
+    error.status = 400;
+    next(error);
+    return;
+  }
 
   const result = await addCat({
     ...req.body,
@@ -40,14 +49,18 @@ const postCat = async (req, res) => {
     res.status(201);
     res.json({ message: "New cat added.", result });
   } else {
-    res.sendStatus(400);
+    const error = new Error("Cat could not be created");
+    error.status = 400;
+    next(error);
   }
 };
 
-const putCat = async (req, res) => {
+const putCat = async (req, res, next) => {
   const cat = await findCatById(req.params.id);
   if (!cat) {
-    res.sendStatus(404);
+    const error = new Error("Cat not found");
+    error.status = 404;
+    next(error);
     return;
   }
 
@@ -61,14 +74,18 @@ const putCat = async (req, res) => {
   if (result) {
     res.json({ message: "Cat item updated.", result });
   } else {
-    res.sendStatus(403);
+    const error = new Error("Not authorized to update this cat");
+    error.status = 403;
+    next(error);
   }
 };
 
-const deleteCat = async (req, res) => {
+const deleteCat = async (req, res, next) => {
   const cat = await findCatById(req.params.id);
   if (!cat) {
-    res.sendStatus(404);
+    const error = new Error("Cat not found");
+    error.status = 404;
+    next(error);
     return;
   }
 
@@ -76,7 +93,9 @@ const deleteCat = async (req, res) => {
   if (result) {
     res.json(result);
   } else {
-    res.sendStatus(403);
+    const error = new Error("Not authorized to delete this cat");
+    error.status = 403;
+    next(error);
   }
 };
 

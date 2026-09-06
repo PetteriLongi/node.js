@@ -12,17 +12,19 @@ const getUser = async (req, res) => {
   res.json(users);
 };
 
-const getUserById = async (req, res) => {
+const getUserById = async (req, res, next) => {
   const user = await findUserById(req.params.id);
 
   if (user) {
     res.json(user);
   } else {
-    res.sendStatus(404);
+    const error = new Error("User not found");
+    error.status = 404;
+    next(error);
   }
 };
 
-const postUser = async (req, res) => {
+const postUser = async (req, res, next) => {
   const { name, username, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = {
@@ -38,16 +40,20 @@ const postUser = async (req, res) => {
     res.status(201);
     res.json({ message: "New user added.", result });
   } else {
-    res.sendStatus(400);
+    const error = new Error("User could not be created");
+    error.status = 400;
+    next(error);
   }
 };
 
-const putUser = async (req, res) => {
+const putUser = async (req, res, next) => {
   if (
     Number(req.params.id) !== res.locals.user.user_id &&
     res.locals.user.role !== "admin"
   ) {
-    res.sendStatus(403);
+    const error = new Error("Not authorized to update this user");
+    error.status = 403;
+    next(error);
     return;
   }
 
@@ -57,16 +63,20 @@ const putUser = async (req, res) => {
   if (result) {
     res.json(result);
   } else {
-    res.sendStatus(404);
+    const error = new Error("User not found");
+    error.status = 404;
+    next(error);
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
   if (
     Number(req.params.id) !== res.locals.user.user_id &&
     res.locals.user.role !== "admin"
   ) {
-    res.sendStatus(403);
+    const error = new Error("Not authorized to delete this user");
+    error.status = 403;
+    next(error);
     return;
   }
   const result = await removeUser(req.params.id);
@@ -74,7 +84,9 @@ const deleteUser = async (req, res) => {
   if (result) {
     res.json(result);
   } else {
-    res.sendStatus(404);
+    const error = new Error("User not found");
+    error.status = 404;
+    next(error);
   }
 };
 
