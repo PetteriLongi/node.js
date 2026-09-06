@@ -2,19 +2,61 @@
 GET http://127.0.0.1:3000/api/v1/cats
 
 ### Get cat by ID
-GET http://127.0.0.1:3000/api/v1/cats/1
+GET http://127.0.0.1:3000/api/v1/cats/41
 
-### Add a new cat
-POST http://127.0.0.1:3000/api/v1/cats
-Content-Type: application/json
+### create test cat 1
+POST http://127.0.0.1:3000/api/v1/cats HTTP/1.1
+Content-Type: multipart/form-data; boundary=MyBoundary
 
-{
-  "cat_name": "Peo",
-  "birthdate": "2021-08-20",
-  "weight": 5.2,
-  "owner": "Minä",
-  "image": "https://loremflickr.com/320/240/cat"
-}
+--MyBoundary
+Content-Disposition: form-data; name="cat_name"
+
+TestCat1
+--MyBoundary
+Content-Disposition: form-data; name="weight"
+
+5
+--MyBoundary
+Content-Disposition: form-data; name="owner"
+
+38
+--MyBoundary
+Content-Disposition: form-data; name="birthdate"
+
+2021-08-20
+--MyBoundary
+Content-Disposition: form-data; name="cat"; filename="placeholder_image.png"
+Content-Type: image/png
+
+< ./public/placeholder_image.png
+--MyBoundary--
+
+### create test cat 2
+POST http://127.0.0.1:3000/api/v1/cats HTTP/1.1
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="cat_name"
+
+TestCat2
+--MyBoundary
+Content-Disposition: form-data; name="weight"
+
+2
+--MyBoundary
+Content-Disposition: form-data; name="owner"
+
+38
+--MyBoundary
+Content-Disposition: form-data; name="birthdate"
+
+2021-08-23
+--MyBoundary
+Content-Disposition: form-data; name="cat"; filename="placeholder_image.png"
+Content-Type: image/png
+
+< ./public/placeholder_image.png
+--MyBoundary--
 
 ### Update a cat
 PUT http://127.0.0.1:3000/api/v1/cats/1
@@ -25,7 +67,7 @@ Content-Type: application/json
 }
 
 ### Delete a cat
-DELETE http://127.0.0.1:3000/api/v1/cats/1
+DELETE http://127.0.0.1:3000/api/v1/cats/43
 
 #####
 ###
@@ -62,4 +104,5 @@ Content-Type: application/json
 }
 
 ### Delete a user
-DELETE http://127.0.0.1:3000/api/v1/users/3609
+DELETE http://127.0.0.1:3000/api/v1/users/38
+
