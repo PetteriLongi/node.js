@@ -4,6 +4,7 @@ import multer from "multer";
 import {
   getCat,
   getCatById,
+  getCatsByUserId,
   postCat,
   putCat,
   deleteCat,
@@ -17,6 +18,7 @@ catRouter
   .get(getCat)
   .post(upload.single("cat"), createThumbnail, postCat);
 
+catRouter.route("/user/:userId").get(getCatsByUserId);
 catRouter.route("/:id").get(getCatById).put(putCat).delete(deleteCat);
 
 export default catRouter;
